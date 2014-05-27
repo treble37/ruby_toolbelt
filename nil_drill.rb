@@ -1,22 +1,11 @@
-def nil_keys?(original, options={flag: false})
+def got_nils?(original, options={flag: false, method: :keys})
+  ##method: :keys or :values (of a Hash)
+  raise ArgumentError, "no method :keys or :values in options" if !(options[:method]==:keys||options[:method]==:values)
   flag = options[:flag]
   if original.is_a?(Hash)
-    keys = original.keys
-    keys.each do |key|
-      flag = flag || nil_keys?(key, {flag: flag})
-    end
-  else
-    flag = flag || original.nil?
-  end
-  flag
-end
-
-def nil_values?(original, options={flag: false})
-  flag = options[:flag]
-  if original.is_a?(Hash)
-    values = original.values
-    values.each do |key|
-      flag = flag || nil_values?(key, {flag: flag})
+    values = original.send(options[:method])
+    values.each do |val|
+      flag = flag || got_nils?(val, {flag: flag, method: options[:method]})
     end
   else
     flag = flag || original.nil?
@@ -25,4 +14,4 @@ def nil_values?(original, options={flag: false})
 end
 
 h = {:a=>1, :b=>2, :d=>{:c=>nil}}
-puts nil_values?(h,{flag: false})
+p got_nils?(h,options = {flag: false, method: :values})
