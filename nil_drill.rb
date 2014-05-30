@@ -1,11 +1,11 @@
-def got_nils?(original, options={flag: false, method: :keys})
+def got_nils?(original, options={method: :keys})
   ##method: :keys or :values (of a Hash)
   raise ArgumentError, "no method :keys or :values in options" if !(options[:method]==:keys||options[:method]==:values)
-  flag = options[:flag]
+  flag = false
   if original.is_a?(Hash)
     values = original.send(options[:method])
-    values.each do |val|
-      flag = flag || got_nils?(val, {flag: flag, method: options[:method]})
+    values.detect do |val|
+      flag = flag || got_nils?(val, options)
     end
   else
     flag = flag || original.nil?
@@ -17,13 +17,13 @@ def nil_substituter(nested_hash, options={default: ""})
   #iterate through nested hash and if a nil is encountered, substitute value
   #default key is always an option
   #other keys in options hash should match up to keys in nested_hash if you want to substitute that key's value
-  return nil if !nested_hash.is_a?(Hash)
+  return nil unless nested_hash.is_a?(Hash)
   options = {default: ""}.merge(options)
   nested_hash.each do |key, value|
-    if value==nil
-      nested_hash[key] = options[:default] || options[key]
-    elsif value.is_a?(Hash)
+    if value.is_a?(Hash)
       nil_substituter(nested_hash[key], options)
+    elsif value.nil?
+      nested_hash[key] = options[key] || options[:default] 
     end
   end
   nested_hash
@@ -75,8 +75,8 @@ def nested_hash_keys(nested_hash)
   keys.flatten!.reject { |k| k==nil }
 end
 
-# g = {:a=>{:b=>nil, :c=>{:d=>nil}}, :e=>{:f=>{:g=>{:h=>nil}}}}
-# p nil_substituter(g, options={default: ""})
+g = {:a=>{:b=>nil, :c=>{:d=>nil}}, :e=>{:f=>{:g=>{:h=>nil}}}}
+p nil_substituter(g, options={default: ""})
 
 # h = {:a=>1, :b=>2, :d=>{:c=>nil}}
 # p got_nils?(h, options = {flag: false, method: :values})
@@ -85,6 +85,6 @@ end
 # c = nested_hash_keys(i)
 # p nil_chain_builder(i, options={default: "", "c"=>55}, *c)
 
-i = {"a"=>{"b"=>{"c"=>nil}}}
-c = ["a","b","c","d"]
-p nil_chain_substitute_builder(i, options={default: "", "c"=>55}, *c)
+# i = {"a"=>{"b"=>{"c"=>nil}}}
+# c = ["a","b","c","d"]
+# p nil_chain_substitute_builder(i, options={default: "", "c"=>55}, *c)
