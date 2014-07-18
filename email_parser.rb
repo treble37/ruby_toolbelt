@@ -1,5 +1,5 @@
 class EmailParser
-  def initialiaze
+  def initialize
   end
   def string_to_emails(s, split_chars)
     #given a string containing emails delimited by "split_chars" (e.g., whitespace, etc.), return an array of emails only
