@@ -15,7 +15,11 @@ class RegexTools
   def number_commas(n)
     n.to_s.gsub(/(?<=\d)(?=(\d\d\d)+$)/,',')
   end
+  def is_date?(date)
+    m = date =~ /[0-9]+\/[0-9]+\/[0-9]+/
+    !m.nil?
+  end
 end
 
 r=RegexTools.new
-puts r.number_commas(1234567890)
+puts r.is_date?("1/18/2014")
