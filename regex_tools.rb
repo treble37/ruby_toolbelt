@@ -15,7 +15,10 @@ class RegexTools
   def number_commas(n)
     n.to_s.gsub(/(?<=\d)(?=(\d\d\d)+$)/,',')
   end
+  def linkenize_email(email)
+    email.gsub(/([a-zA-z0-9_-])+@([a-zA-Z])+\.([a-zA-z])+/, "<a href=mailto:#{email}>"+email+"</a>")
+  end
 end
 
 r=RegexTools.new
-puts r.number_commas(1234567890)
+puts r.linkenize_email("google@google.com")
