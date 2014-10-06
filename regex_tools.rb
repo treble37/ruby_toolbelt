@@ -18,6 +18,10 @@ class RegexTools
   def linkenize_email(email)
     email.gsub(/([a-zA-z0-9_-])+@([a-zA-Z])+\.([a-zA-z])+/, "<a href=mailto:#{email}>"+email+"</a>")
   end
+  def is_date?(date)
+    m = date =~ /[0-9]+\/[0-9]+\/[0-9]+/
+    !m.nil?
+  end
 end
 
 r=RegexTools.new
