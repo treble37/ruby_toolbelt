@@ -11,7 +11,14 @@ class CSVTools
         csv << row
       end
     end
-    
+  end
+
+  def read_from_csv_file(file_name)
+    @csv_data = []
+    CSV.foreach(file_name) do |row|
+      @csv_data << row
+    end
+    @csv_data
   end
 end
 

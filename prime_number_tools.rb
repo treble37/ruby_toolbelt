@@ -17,6 +17,8 @@ class PrimeNumberTools
         end
       end
     end
+    @prime_list[0] = 0
+    @prime_list[1] = 0
     @prime_list
   end
 
