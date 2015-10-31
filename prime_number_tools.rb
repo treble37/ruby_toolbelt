@@ -6,7 +6,7 @@ class PrimeNumberTools
 
   def sieve_of_eratosthenes(n)
     #find all primes <= n, 1 is prime, 0 is composite
-    @prime_list = Array.new((0..n).map { |m| m}.length, 1)
+    @prime_list = Array.new((0..n).map { |m| m}.length-1, 1)
     m = Math.sqrt(n).floor
     (2..m).each do |i|
       if @prime_list[i]==1
