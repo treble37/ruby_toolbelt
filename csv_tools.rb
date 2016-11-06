@@ -14,6 +14,7 @@ class CSVTools
   end
 
   def read_from_csv_file(file_name)
+    # read csv into array of arrays
     @csv_data = []
     CSV.foreach(file_name) do |row|
       @csv_data << row
